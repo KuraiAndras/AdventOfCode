@@ -1,0 +1,9 @@
+<Project>
+
+  <ItemGroup>
+    <Content Include="*.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2021", "2021", "{F72B711F-4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Day1", "Years\2021\Day1\Day1.csproj", "{53B02C59-F625-4B1F-8B23-D29644B36CC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day2", "Years\2021\Day2\Day2.csproj", "{06E14DDD-CB46-41AE-95D2-1DE02D772746}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{53B02C59-F625-4B1F-8B23-D29644B36CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B02C59-F625-4B1F-8B23-D29644B36CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B02C59-F625-4B1F-8B23-D29644B36CC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06E14DDD-CB46-41AE-95D2-1DE02D772746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06E14DDD-CB46-41AE-95D2-1DE02D772746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06E14DDD-CB46-41AE-95D2-1DE02D772746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06E14DDD-CB46-41AE-95D2-1DE02D772746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F72B711F-4EF3-41A2-9D9F-9AC126600E1A} = {9731D8CB-D362-4619-BC91-9C25D387264B}
 		{53B02C59-F625-4B1F-8B23-D29644B36CC5} = {F72B711F-4EF3-41A2-9D9F-9AC126600E1A}
+		{06E14DDD-CB46-41AE-95D2-1DE02D772746} = {F72B711F-4EF3-41A2-9D9F-9AC126600E1A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EDD75AAF-0C4A-4328-AD73-83D593594A4B}

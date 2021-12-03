@@ -1,12 +1,27 @@
-﻿using static Common.Helper;
+﻿using MoreLinq;
+using static Common.Helper;
+using static System.Console;
 
 var numbers = (await LoadDayLines(1))
     .Select(line => int.Parse(line))
     .ToArray();
 
-var incrementCount = numbers
-    .Skip(1)
-    .Where((number, index) => number > numbers[index])
-    .Count();
+var incrementCount = CountIncrements(numbers);
 
-Console.WriteLine($"Part 1 is: {incrementCount}");
+WriteLine($"Part 1 is: {incrementCount}");
+
+var windowedNumbers = numbers
+    .Window(3)
+    .Where(window => window.Count == 3)
+    .Select(window => window.Aggregate(0, (sum, current) => sum + current))
+    .ToArray();
+
+var windowedIncrementCount = CountIncrements(windowedNumbers);
+
+WriteLine($"Part 2 is: {windowedIncrementCount}");
+
+static int CountIncrements(int[] numbers) =>
+    numbers
+        .Skip(1)
+        .Where((number, index) => number > numbers[index])
+        .Count();

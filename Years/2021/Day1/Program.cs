@@ -2,7 +2,7 @@
 using static Common.Helper;
 using static System.Console;
 
-var numbers = (await LoadDayLines(1))
+var numbers = (await LoadPartLines(1))
     .Select(line => int.Parse(line))
     .ToArray();
 

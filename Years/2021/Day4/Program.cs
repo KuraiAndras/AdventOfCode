@@ -35,6 +35,16 @@ if (winner is null)
 
 Answer(1, winner.GetPoints());
 
+var lastWinner = Bingo.GetLastWinner(numbers, bingos);
+
+if (lastWinner is null)
+{
+    WriteLine($"Cloud not find last winner.");
+    return;
+}
+
+Answer(2, lastWinner.GetPoints());
+
 record Bingo(int Height, int Width, BingoNumber[][] Numbers)
 {
 
@@ -48,10 +58,7 @@ record Bingo(int Height, int Width, BingoNumber[][] Numbers)
     {
         var hasWinningRow = Numbers.Any(l => l.All(n => n.IsSelected));
 
-        if (hasWinningRow)
-        {
-            return true;
-        }
+        if (hasWinningRow) return true;
 
         var hasWinningColumn = false;
         for (var i = 0; i < Height; i++)
@@ -69,10 +76,7 @@ record Bingo(int Height, int Width, BingoNumber[][] Numbers)
             }
         }
 
-        if (hasWinningColumn)
-        {
-            return true;
-        }
+        if (hasWinningColumn) return true;
 
         return false;
     }
@@ -106,6 +110,32 @@ record Bingo(int Height, int Width, BingoNumber[][] Numbers)
         }
 
         return null;
+    }
+
+    public static Winner? GetLastWinner(IEnumerable<int> numbers, IEnumerable<Bingo> bingos)
+    {
+        ImmutableArray<Winner> ChekWinners()
+        {
+            var remaining = bingos.ToImmutableArray();
+            var winners = ImmutableArray<Winner>.Empty;
+
+            foreach (var number in numbers)
+            {
+                foreach (var bingo in remaining)
+                {
+                    bingo.NextNumber(number);
+                    if (bingo.IsWinner()) winners = winners.Add(new(number, bingo));
+                }
+
+                remaining = remaining.RemoveRange(winners.Select(w => w.Board));
+            }
+
+            return winners;
+        }
+
+        var remaining = ChekWinners();
+
+        return remaining.LastOrDefault();
     }
 
     public static Bingo Parse(IEnumerable<IEnumerable<int>> inputNumbers)

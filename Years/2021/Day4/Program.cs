@@ -114,28 +114,24 @@ record Bingo(int Height, int Width, BingoNumber[][] Numbers)
 
     public static Winner? GetLastWinner(IEnumerable<int> numbers, IEnumerable<Bingo> bingos)
     {
-        ImmutableArray<Winner> ChekWinners()
+        var remaining = bingos.ToList();
+        var winners = new List<Winner>();
+
+        foreach (var number in numbers)
         {
-            var remaining = bingos.ToImmutableArray();
-            var winners = ImmutableArray<Winner>.Empty;
+            remaining.ForEach(b => b.NextNumber(number));
 
-            foreach (var number in numbers)
-            {
-                foreach (var bingo in remaining)
-                {
-                    bingo.NextNumber(number);
-                    if (bingo.IsWinner()) winners = winners.Add(new(number, bingo));
-                }
+            var nextWinners = remaining
+                .Where(bingo => bingo.IsWinner())
+                .Select(b => new Winner(number, b));
+            winners.AddRange(nextWinners);
 
-                remaining = remaining.RemoveRange(winners.Select(w => w.Board));
-            }
-
-            return winners;
+            remaining = remaining
+                .Except(winners.Select(w => w.Board))
+                .ToList();
         }
 
-        var remaining = ChekWinners();
-
-        return remaining.LastOrDefault();
+        return winners.LastOrDefault();
     }
 
     public static Bingo Parse(IEnumerable<IEnumerable<int>> inputNumbers)

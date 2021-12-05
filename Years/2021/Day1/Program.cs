@@ -8,7 +8,7 @@ var numbers = (await LoadPartLines(1))
 
 var incrementCount = CountIncrements(numbers);
 
-WriteLine($"Part 1 is: {incrementCount}");
+Answer(1, incrementCount);
 
 var windowedNumbers = numbers
     .Window(3)
@@ -18,7 +18,7 @@ var windowedNumbers = numbers
 
 var windowedIncrementCount = CountIncrements(windowedNumbers);
 
-WriteLine($"Part 2 is: {windowedIncrementCount}");
+Answer(2, windowedIncrementCount);
 
 static int CountIncrements(int[] numbers) =>
     numbers

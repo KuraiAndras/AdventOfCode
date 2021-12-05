@@ -22,19 +22,7 @@ var height = vectorPairs.SelectMany((pair) => new[] { pair.a, pair.b }).Max(v =>
 
 var straightLines = vectorPairs.Where(pair => pair.a.X == pair.b.X || pair.a.Y == pair.b.Y).ToImmutableArray();
 
-int[][] InitializeMap()
-{
-    var map = new int[height + 1][];
-
-    for (int i = 0; i < height + 1; i++)
-    {
-        map[i] = new int[width + 1];
-    }
-
-    return map;
-}
-
-var map = InitializeMap();
+var map = CreateMap(height, width);
 
 void UpdateValue(int x, int y) => map[y][x] = map[y][x] + 1;
 
@@ -47,7 +35,7 @@ var atLeast2 = map.SelectMany(l => l).Count(i => i >= 2);
 
 Answer(1, atLeast2);
 
-map = InitializeMap();
+map = CreateMap(height, width);
 
 foreach (var (a, b) in vectorPairs)
 {
@@ -58,6 +46,18 @@ atLeast2 = map.SelectMany(l => l).Count(i => i >= 2);
 
 Answer(2, atLeast2);
 
+static int[][] CreateMap(int height, int width)
+{
+    var map = new int[height + 1][];
+
+    for (int i = 0; i < height + 1; i++)
+    {
+        map[i] = new int[width + 1];
+    }
+
+    return map;
+}
+
 static void Bresenhams(Vector a, Vector b, Found found)
 {
     var x = a.X;
@@ -65,14 +65,14 @@ static void Bresenhams(Vector a, Vector b, Found found)
     var x2 = b.X;
     var y2 = b.Y;
 
-    int w = x2 - x;
-    int h = y2 - y;
+    var w = x2 - x;
+    var h = y2 - y;
     int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
     if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
     if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
     if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
-    int longest = Math.Abs(w);
-    int shortest = Math.Abs(h);
+    var longest = Math.Abs(w);
+    var shortest = Math.Abs(h);
     if (!(longest > shortest))
     {
         longest = Math.Abs(h);
@@ -80,7 +80,7 @@ static void Bresenhams(Vector a, Vector b, Found found)
         if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
         dx2 = 0;
     }
-    int numerator = longest >> 1;
+    var numerator = longest >> 1;
     for (int i = 0; i <= longest; i++)
     {
         found(x, y);

@@ -21,22 +21,21 @@ namespace Day6
     {
         public static long Simulate(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
         {
-            var fishByPeriod = initialFish
-                .GroupBy(x => x)
-                .OrderBy(x => x.Key)
-                .Select(x => (age: x.Key, count: x.Count()))
-                .ToArray();
-
             var fishes = new long[newlyBornTime];
 
-            for (var i = 1; i <= fishByPeriod.Length; i++)
+            for (var i = 0; i < initialFish.Count; i++)
             {
-                fishes[i] = fishByPeriod[i - 1].count;
+                fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
             }
+
+            var nextIteration = new long[fishes.Length];
 
             for (var i = 0; i < numberOfDays; i++)
             {
-                var nextIteration = new long[fishes.Length];
+                for (var j = 0; j < fishes.Length; j++)
+                {
+                    nextIteration[j] = 0L;
+                }
 
                 for (var j = 0; j < fishes.Length; j++)
                 {
@@ -51,10 +50,20 @@ namespace Day6
                     }
                 }
 
-                fishes = nextIteration;
+                for (var j = 0; j < fishes.Length; j++)
+                {
+                    fishes[j] = nextIteration[j];
+                }
             }
 
-            return fishes.Aggregate(0L, (sum, x) => sum + x);
+            var sum = 0L;
+
+            for (var i = 0; i < fishes.Length; i++)
+            {
+                sum += fishes[i];
+            }
+
+            return sum;
         }
     }
 }

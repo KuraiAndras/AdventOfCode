@@ -28,6 +28,12 @@ public class Bench
     [Benchmark]
     public long Simulate4() => Simulate4(_numbers, 256, 9, 7);
 
+    [Benchmark]
+    public long Simulate5() => Simulate5(_numbers, 256, 9, 7);
+
+    [Benchmark]
+    public long Simulate6() => Simulate6(_numbers, 256, 9, 7);
+
     public static BigInteger Simulate(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishByPeriod = initialFish
@@ -195,5 +201,84 @@ public class Bench
         }
 
         return fishes.Aggregate(0L, (sum, x) => sum + x);
+    }
+
+    public static long Simulate5(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    {
+        var fishes = new long[newlyBornTime];
+
+        for (var i = 0; i < initialFish.Count; i++)
+        {
+            fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
+        }
+
+        for (var i = 0; i < numberOfDays; i++)
+        {
+            var nextIteration = new long[fishes.Length];
+
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                if (j != newlyBornTime - 1)
+                {
+                    nextIteration[j] += fishes[j + 1];
+                }
+                else
+                {
+                    nextIteration[birthTime - 1] += fishes[0];
+                    nextIteration[newlyBornTime - 1] = fishes[0];
+                }
+            }
+
+            fishes = nextIteration;
+        }
+
+        return fishes.Aggregate(0L, (sum, x) => sum + x);
+    }
+
+    public static long Simulate6(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    {
+        var fishes = new long[newlyBornTime];
+
+        for (var i = 0; i < initialFish.Count; i++)
+        {
+            fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
+        }
+
+        var nextIteration = new long[fishes.Length];
+
+        for (var i = 0; i < numberOfDays; i++)
+        {
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                nextIteration[j] = 0L;
+            }
+
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                if (j != newlyBornTime - 1)
+                {
+                    nextIteration[j] += fishes[j + 1];
+                }
+                else
+                {
+                    nextIteration[birthTime - 1] += fishes[0];
+                    nextIteration[newlyBornTime - 1] = fishes[0];
+                }
+            }
+
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                fishes[j] = nextIteration[j];
+            }
+        }
+
+        var sum = 0L;
+
+        for (var i = 0; i < fishes.Length; i++)
+        {
+            sum += fishes[i];
+        }
+
+        return sum;
     }
 }

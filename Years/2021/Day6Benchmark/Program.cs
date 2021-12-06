@@ -244,7 +244,7 @@ public class Bench
 
         for (var i = 0; i < initialFish.Length; i++)
         {
-            fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
+            fishes[initialFish[i]] += 1;
         }
 
         var nextIteration = new long[fishes.Length];
@@ -285,13 +285,13 @@ public class Bench
         return sum;
     }
 
-    public static long Simulate7(ReadOnlySpan<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    public static long Simulate(ReadOnlySpan<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         Span<long> fishes = stackalloc long[newlyBornTime];
 
         for (var i = 0; i < initialFish.Length; i++)
         {
-            fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
+            fishes[initialFish[i]] += 1;
         }
 
         Span<long> nextIteration = stackalloc long[fishes.Length];

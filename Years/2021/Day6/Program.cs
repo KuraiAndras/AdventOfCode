@@ -1,6 +1,5 @@
 ﻿using Day6;
 using System.Collections.Immutable;
-using System.Numerics;
 using static Common.Helper;
 
 var numbers = (await LoadPart(1))
@@ -20,7 +19,7 @@ namespace Day6
 {
     public static class LanternfishSimulation
     {
-        public static BigInteger Simulate(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+        public static long Simulate(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
         {
             var fishByPeriod = initialFish
                 .GroupBy(x => x)
@@ -28,7 +27,7 @@ namespace Day6
                 .Select(x => (age: x.Key, count: x.Count()))
                 .ToArray();
 
-            var fishes = new BigInteger[newlyBornTime];
+            var fishes = new long[newlyBornTime];
 
             for (var i = 1; i <= fishByPeriod.Length; i++)
             {
@@ -37,7 +36,7 @@ namespace Day6
 
             for (var i = 0; i < numberOfDays; i++)
             {
-                var nextIteration = new BigInteger[fishes.Length];
+                var nextIteration = new long[fishes.Length];
 
                 for (var j = 0; j < fishes.Length; j++)
                 {
@@ -55,7 +54,7 @@ namespace Day6
                 fishes = nextIteration;
             }
 
-            return fishes.Aggregate(new BigInteger(0), (sum, x) => sum + x);
+            return fishes.Aggregate(0L, (sum, x) => sum + x);
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using Day6;
-using System.Collections.Immutable;
 using static Common.Helper;
 
 var numbers = (await LoadPart(1))
     .Split(',')
     .Select(int.Parse)
-    .ToImmutableArray();
+    .ToArray();
 
-var numberOfFish = LanternfishSimulation.Simulate(numbers.ToList(), 80, 9, 7);
+var numberOfFish = LanternfishSimulation.Simulate(numbers, 80, 9, 7);
 
 Answer(1, numberOfFish);
 
-numberOfFish = LanternfishSimulation.Simulate(numbers.ToList(), 256, 9, 7);
+numberOfFish = LanternfishSimulation.Simulate(numbers, 256, 9, 7);
 
 Answer(2, numberOfFish);
 
@@ -19,16 +18,16 @@ namespace Day6
 {
     public static class LanternfishSimulation
     {
-        public static long Simulate(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+        public static long Simulate(ReadOnlySpan<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
         {
-            var fishes = new long[newlyBornTime];
+            Span<long> fishes = stackalloc long[newlyBornTime];
 
-            for (var i = 0; i < initialFish.Count; i++)
+            for (var i = 0; i < initialFish.Length; i++)
             {
                 fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
             }
 
-            var nextIteration = new long[fishes.Length];
+            Span<long> nextIteration = stackalloc long[fishes.Length];
 
             for (var i = 0; i < numberOfDays; i++)
             {

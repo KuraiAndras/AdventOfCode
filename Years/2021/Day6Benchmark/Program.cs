@@ -7,14 +7,14 @@ _ = BenchmarkRunner.Run<Bench>();
 [MemoryDiagnoser]
 public class Bench
 {
-    private List<int> _numbers = new List<int>();
+    private int[] _numbers = Array.Empty<int>();
 
     [GlobalSetup]
     public void Setup() => _numbers = File
         .ReadAllText("Data1.txt")
         .Split(',')
         .Select(int.Parse)
-        .ToList();
+        .ToArray();
 
     [Benchmark]
     public BigInteger Simulate() => Simulate(_numbers, 256, 9, 7);
@@ -34,7 +34,10 @@ public class Bench
     [Benchmark]
     public long Simulate6() => Simulate6(_numbers, 256, 9, 7);
 
-    public static BigInteger Simulate(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    [Benchmark]
+    public long Simulate7() => Simulate7(_numbers, 256, 9, 7);
+
+    public static BigInteger Simulate(int[] initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishByPeriod = initialFish
             .GroupBy(x => x)
@@ -72,7 +75,7 @@ public class Bench
         return fishes.Aggregate(new BigInteger(0), (sum, x) => sum + x);
     }
 
-    public static BigInteger Simulate2(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    public static BigInteger Simulate2(int[] initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishByPeriod = initialFish
             .GroupBy(x => x)
@@ -119,7 +122,7 @@ public class Bench
         return fishes.Aggregate(new BigInteger(0), (sum, x) => sum + x);
     }
 
-    public static long Simulate3(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    public static long Simulate3(int[] initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishByPeriod = initialFish
             .GroupBy(x => x)
@@ -165,7 +168,7 @@ public class Bench
         return fishes.Aggregate(0L, (sum, x) => sum + x);
     }
 
-    public static long Simulate4(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    public static long Simulate4(int[] initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishByPeriod = initialFish
             .GroupBy(x => x)
@@ -203,11 +206,11 @@ public class Bench
         return fishes.Aggregate(0L, (sum, x) => sum + x);
     }
 
-    public static long Simulate5(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    public static long Simulate5(int[] initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishes = new long[newlyBornTime];
 
-        for (var i = 0; i < initialFish.Count; i++)
+        for (var i = 0; i < initialFish.Length; i++)
         {
             fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
         }
@@ -235,16 +238,63 @@ public class Bench
         return fishes.Aggregate(0L, (sum, x) => sum + x);
     }
 
-    public static long Simulate6(List<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    public static long Simulate6(int[] initialFish, int numberOfDays, int newlyBornTime, int birthTime)
     {
         var fishes = new long[newlyBornTime];
 
-        for (var i = 0; i < initialFish.Count; i++)
+        for (var i = 0; i < initialFish.Length; i++)
         {
             fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
         }
 
         var nextIteration = new long[fishes.Length];
+
+        for (var i = 0; i < numberOfDays; i++)
+        {
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                nextIteration[j] = 0L;
+            }
+
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                if (j != newlyBornTime - 1)
+                {
+                    nextIteration[j] += fishes[j + 1];
+                }
+                else
+                {
+                    nextIteration[birthTime - 1] += fishes[0];
+                    nextIteration[newlyBornTime - 1] = fishes[0];
+                }
+            }
+
+            for (var j = 0; j < fishes.Length; j++)
+            {
+                fishes[j] = nextIteration[j];
+            }
+        }
+
+        var sum = 0L;
+
+        for (var i = 0; i < fishes.Length; i++)
+        {
+            sum += fishes[i];
+        }
+
+        return sum;
+    }
+
+    public static long Simulate7(ReadOnlySpan<int> initialFish, int numberOfDays, int newlyBornTime, int birthTime)
+    {
+        Span<long> fishes = stackalloc long[newlyBornTime];
+
+        for (var i = 0; i < initialFish.Length; i++)
+        {
+            fishes[initialFish[i]] = fishes[initialFish[i]] + 1;
+        }
+
+        Span<long> nextIteration = stackalloc long[fishes.Length];
 
         for (var i = 0; i < numberOfDays; i++)
         {

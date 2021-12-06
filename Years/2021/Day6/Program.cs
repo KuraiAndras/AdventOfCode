@@ -26,7 +26,10 @@ static long Simulate(ReadOnlySpan<int> initialFish, int numberOfDays, int newlyB
 
     for (var i = 0; i < numberOfDays; i++)
     {
-        nextIteration.Clear();
+        for (var j = 0; j < fishes.Length; j++)
+        {
+            nextIteration[j] = 0L;
+        }
 
         for (var j = 0; j < fishes.Length; j++)
         {
@@ -41,7 +44,10 @@ static long Simulate(ReadOnlySpan<int> initialFish, int numberOfDays, int newlyB
             }
         }
 
-        nextIteration.CopyTo(fishes);
+        for (var j = 0; j < fishes.Length; j++)
+        {
+            fishes[j] = nextIteration[j];
+        }
     }
 
     var sum = 0L;

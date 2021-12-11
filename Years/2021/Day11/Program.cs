@@ -56,7 +56,7 @@ static int CalculateFlashes(int height, int width, ImmutableArray<ImmutableArray
 
         for (var j = 0; j < width; j++)
         {
-            map[i][j] = new Octopus(j, i, energyLevels[i][j], false);
+            map[i][j] = new Octopus(energyLevels[i][j], false);
         }
     }
 
@@ -111,7 +111,7 @@ static int CalculateFirstFlash(int height, int width, ImmutableArray<ImmutableAr
 
         for (var j = 0; j < width; j++)
         {
-            map[i][j] = new Octopus(j, i, energyLevels[i][j], false);
+            map[i][j] = new Octopus(energyLevels[i][j], false);
         }
     }
 
@@ -166,16 +166,12 @@ static int CalculateFirstFlash(int height, int width, ImmutableArray<ImmutableAr
 
 class Octopus
 {
-    public Octopus(int x, int y, int energyLevel, bool didFlash)
+    public Octopus(int energyLevel, bool didFlash)
     {
-        X = x;
-        Y = y;
         EnergyLevel = energyLevel;
         DidFlash = didFlash;
     }
 
-    public int X { get; set; }
-    public int Y { get; set; }
     public int EnergyLevel { get; set; }
     public bool DidFlash { get; set; }
 }

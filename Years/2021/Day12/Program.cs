@@ -35,15 +35,24 @@ foreach (var path in paths)
 
 var start = caves.Single(c => c.IsStart);
 
-var visitationHistory = new List<Cave> { start };
+var previousPaths = new List<List<Cave>>();
 
-FindPath(visitationHistory);
+var foundAll = false;
 
-var pathToEnd = visitationHistory.Aggregate(new StringBuilder(), (sb, c) => sb.Append(c.Id).Append(',')).ToString().TrimEnd(',');
+while (!foundAll)
+{
+    var visitationHistory = new List<Cave> { start };
 
-Console.WriteLine(pathToEnd);
+    FindPath(visitationHistory, previousPaths);
 
-static void FindPath(List<Cave> caves)
+    var pathToEnd = visitationHistory.Aggregate(new StringBuilder(), (sb, c) => sb.Append(c.Id).Append(',')).ToString().TrimEnd(',');
+
+    Console.WriteLine(pathToEnd);
+
+    previousPaths.Add(visitationHistory);
+}
+
+static void FindPath(List<Cave> caves, List<List<Cave>> previousPaths) 
 {
     var current = caves.Last();
     var nextPossibles = current.ListVisitables(caves);
@@ -53,7 +62,7 @@ static void FindPath(List<Cave> caves)
     var next = nextPossibles.First();
     caves.Add(next);
 
-    FindPath(caves);
+    FindPath(caves, previousPaths);
 }
 
 record Path(string From, string To);

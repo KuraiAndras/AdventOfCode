@@ -55,9 +55,9 @@ static void FindPath(ImmutableList<Cave> caves, List<ImmutableList<Cave>> foundP
     var current = caves.Last();
     var nextPossibles = current.ListVisitables(caves, check2s);
 
-    if (!nextPossibles.Any())
+    if (nextPossibles.Length == 0)
     {
-        if (caves.Last().IsEnd) foundPaths.Add(caves);
+        if (caves[^1].IsEnd) foundPaths.Add(caves);
         return;
     }
 
@@ -108,10 +108,10 @@ class Cave
         return !visitationHistory.Any(c => c.Id == Id);
     }
 
-    public Cave[] ListVisitables(ImmutableList<Cave> visitationHistory, bool check2s)
+    public ImmutableArray<Cave> ListVisitables(ImmutableList<Cave> visitationHistory, bool check2s)
     {
-        if (IsEnd) return Array.Empty<Cave>();
-        return Neighbours.Where(c => c.CanVisit(visitationHistory, check2s)).ToArray();
+        if (IsEnd) return ImmutableArray<Cave>.Empty;
+        return Neighbours.Where(c => c.CanVisit(visitationHistory, check2s)).ToImmutableArray();
     }
 
     public override string ToString()

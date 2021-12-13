@@ -39,15 +39,21 @@ var foundPaths = new List<ImmutableList<Cave>>();
 
 var visitationHistory = ImmutableList.Create<Cave>(start);
 
-FindPath(visitationHistory, foundPaths);
+FindPath(visitationHistory, foundPaths, false);
 
 Answer(1, foundPaths.Count);
 
+foundPaths.Clear();
 
-static void FindPath(ImmutableList<Cave> caves, List<ImmutableList<Cave>> foundPaths)
+FindPath(visitationHistory, foundPaths, true);
+
+Answer(2, foundPaths.Count);
+
+
+static void FindPath(ImmutableList<Cave> caves, List<ImmutableList<Cave>> foundPaths, bool check2s)
 {
     var current = caves.Last();
-    var nextPossibles = current.ListVisitables(caves);
+    var nextPossibles = current.ListVisitables(caves, check2s);
 
     if (!nextPossibles.Any())
     {
@@ -59,7 +65,7 @@ static void FindPath(ImmutableList<Cave> caves, List<ImmutableList<Cave>> foundP
     {
         var newList = caves.Add(next);
 
-        FindPath(newList, foundPaths);
+        FindPath(newList, foundPaths, check2s);
     }
 }
 
@@ -82,19 +88,30 @@ class Cave
     public bool IsEnd { get; }
     public List<Cave> Neighbours { get; }
 
-    public bool CanVisit(ImmutableList<Cave> visitationHistory)
+    public bool CanVisit(ImmutableList<Cave> visitationHistory, bool check2s)
     {
         if (IsStart) return false;
         if (IsEnd) return true;
         if (IsBig) return true;
 
+        if (check2s)
+        {
+            if (!visitationHistory
+                .Where(x => !x.IsBig && !x.IsStart && !x.IsEnd)
+                .GroupBy(x => x.Id)
+                .Any(x => x.Count() >= 2))
+            {
+                return true;
+            }
+        }
+
         return !visitationHistory.Any(c => c.Id == Id);
     }
 
-    public Cave[] ListVisitables(ImmutableList<Cave> visitationHistory)
+    public Cave[] ListVisitables(ImmutableList<Cave> visitationHistory, bool check2s)
     {
         if (IsEnd) return Array.Empty<Cave>();
-        return Neighbours.Where(c => c.CanVisit(visitationHistory)).ToArray();
+        return Neighbours.Where(c => c.CanVisit(visitationHistory, check2s)).ToArray();
     }
 
     public override string ToString()

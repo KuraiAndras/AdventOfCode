@@ -35,34 +35,32 @@ foreach (var path in paths)
 
 var start = caves.Single(c => c.IsStart);
 
-var previousPaths = new List<List<Cave>>();
+var foundPaths = new List<ImmutableList<Cave>>();
 
-var foundAll = false;
+var visitationHistory = ImmutableList.Create<Cave>(start);
 
-while (!foundAll)
-{
-    var visitationHistory = new List<Cave> { start };
+FindPath(visitationHistory, foundPaths);
 
-    FindPath(visitationHistory, previousPaths);
+Answer(1, foundPaths.Count);
 
-    var pathToEnd = visitationHistory.Aggregate(new StringBuilder(), (sb, c) => sb.Append(c.Id).Append(',')).ToString().TrimEnd(',');
 
-    Console.WriteLine(pathToEnd);
-
-    previousPaths.Add(visitationHistory);
-}
-
-static void FindPath(List<Cave> caves, List<List<Cave>> previousPaths) 
+static void FindPath(ImmutableList<Cave> caves, List<ImmutableList<Cave>> foundPaths)
 {
     var current = caves.Last();
     var nextPossibles = current.ListVisitables(caves);
 
-    if (!nextPossibles.Any()) return;
+    if (!nextPossibles.Any())
+    {
+        if (caves.Last().IsEnd) foundPaths.Add(caves);
+        return;
+    }
 
-    var next = nextPossibles.First();
-    caves.Add(next);
+    foreach (var next in nextPossibles)
+    {
+        var newList = caves.Add(next);
 
-    FindPath(caves, previousPaths);
+        FindPath(newList, foundPaths);
+    }
 }
 
 record Path(string From, string To);
@@ -84,7 +82,7 @@ class Cave
     public bool IsEnd { get; }
     public List<Cave> Neighbours { get; }
 
-    public bool CanVisit(List<Cave> visitationHistory)
+    public bool CanVisit(ImmutableList<Cave> visitationHistory)
     {
         if (IsStart) return false;
         if (IsEnd) return true;
@@ -93,7 +91,7 @@ class Cave
         return !visitationHistory.Any(c => c.Id == Id);
     }
 
-    public Cave[] ListVisitables(List<Cave> visitationHistory)
+    public Cave[] ListVisitables(ImmutableList<Cave> visitationHistory)
     {
         if (IsEnd) return Array.Empty<Cave>();
         return Neighbours.Where(c => c.CanVisit(visitationHistory)).ToArray();

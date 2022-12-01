@@ -3,10 +3,18 @@ using System.Collections.Immutable;
 using static Common.Helper;
 using static System.Console;
 
-var biggestCalorie = (await LoadPartLines(1))
+var caloriesGroupedByElves = (await LoadPartLines(1))
     .Split(string.Empty)
-    .Select(g => g.Select(int.Parse).ToImmutableArray())
-    .ToImmutableArray()
-    .Max(g => g.Aggregate(0, (sum, c) => sum + c));
+    .Select(g => g.Select(int.Parse).Sum())
+    .ToImmutableArray();
+
+var biggestCalorie = caloriesGroupedByElves.Max();
 
 WriteLine($"part 1: {biggestCalorie}");
+
+var top3CaloriesSummed = caloriesGroupedByElves
+    .OrderDescending()
+    .Take(3)
+    .Sum();
+
+WriteLine($"part 2: {top3CaloriesSummed}");

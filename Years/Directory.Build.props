@@ -6,4 +6,9 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Common.Helper" Static="true"/>
+    <Using Include="System.Console" Static="true"/>
+  </ItemGroup>
+
 </Project>

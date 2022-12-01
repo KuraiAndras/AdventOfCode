@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using static Common.Helper;
 
 var inputLines = await LoadPartLines(1);
 

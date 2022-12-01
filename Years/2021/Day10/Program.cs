@@ -1,6 +1,4 @@
-﻿using static Common.Helper;
-
-var lines = await LoadPartLines(1);
+﻿var lines = await LoadPartLines(1);
 
 var firstIllegalCharacters = new Dictionary<char, int>
 {

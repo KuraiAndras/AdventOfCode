@@ -1,6 +1,4 @@
 ﻿using MoreLinq;
-using static Common.Helper;
-using static System.Console;
 
 var numbers = (await LoadPartLines(1))
     .Select(line => int.Parse(line))

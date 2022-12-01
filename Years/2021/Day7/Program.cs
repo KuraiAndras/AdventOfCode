@@ -1,6 +1,4 @@
-﻿using static Common.Helper;
-
-var input = (await LoadPart(1)).Split(',').Select(int.Parse).ToArray();
+﻿var input = (await LoadPart(1)).Split(',').Select(int.Parse).ToArray();
 
 var maxValue = input.Max();
 var minValue = input.Min();

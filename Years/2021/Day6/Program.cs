@@ -1,6 +1,4 @@
-﻿using static Common.Helper;
-
-var numbers = (await LoadPart(1))
+﻿var numbers = (await LoadPart(1))
     .Split(',')
     .Select(int.Parse)
     .ToArray();

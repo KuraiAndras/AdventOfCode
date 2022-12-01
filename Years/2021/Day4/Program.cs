@@ -1,7 +1,5 @@
 ﻿using MoreLinq;
 using System.Collections.Immutable;
-using static Common.Helper;
-using static System.Console;
 
 var input = await LoadPart(1);
 var inputLines = input.Split(Environment.NewLine).ToImmutableArray();

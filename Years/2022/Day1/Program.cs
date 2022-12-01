@@ -1,7 +1,5 @@
 ﻿using MoreLinq;
 using System.Collections.Immutable;
-using static Common.Helper;
-using static System.Console;
 
 var caloriesGroupedByElves = (await LoadPartLines(1))
     .Split(string.Empty)

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Text;
-using static Common.Helper;
 
 var lines = await LoadPartLines(1);
 

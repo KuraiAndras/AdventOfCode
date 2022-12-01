@@ -1,6 +1,5 @@
 using MoreLinq;
 using System.Collections.Immutable;
-using static Common.Helper;
 
 var lines = await LoadPartLines(1);
 

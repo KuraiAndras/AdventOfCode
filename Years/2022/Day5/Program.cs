@@ -62,7 +62,7 @@ static void DoMoves(ImmutableArray<Column> columns, ImmutableArray<Move> moves, 
     }
 }
 
-static string GetAnswer(ImmutableArray<Column> columns1) => new string(columns1.Select(c => c.Crates.Peek()).ToArray());
+static string GetAnswer(ImmutableArray<Column> columns1) => new(columns1.Select(c => c.Crates.Peek()).ToArray());
 
 class Column
 {

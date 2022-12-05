@@ -12,6 +12,6 @@ var answer1 = elfRangePairs.Count(p => p.first.Intersect(p.second).Count() == p.
 
 Answer(1, answer1);
 
-var answer2 = elfRangePairs.Count(p => p.first.Intersect(p.second).Count() != 0);
+var answer2 = elfRangePairs.Count(p => p.first.Intersect(p.second).Any());
 
 Answer(2, answer2);

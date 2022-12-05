@@ -11,3 +11,7 @@ var elfRangePairs = (await LoadPartLines(1))
 var answer1 = elfRangePairs.Count(p => p.first.Intersect(p.second).Count() == p.second.Length || p.second.Intersect(p.first).Count() == p.first.Length);
 
 Answer(1, answer1);
+
+var answer2 = elfRangePairs.Count(p => p.first.Intersect(p.second).Count() != 0);
+
+Answer(2, answer2);

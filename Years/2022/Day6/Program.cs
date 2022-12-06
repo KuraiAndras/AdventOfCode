@@ -1,17 +1,25 @@
 ﻿var input = await LoadPart(1);
 
-var messageBeginBuffer = new Queue<char>(input.Take(4));
-int messageBeginEndIndex = 4;
+var answer1 = FindMessageBeginIndex(input, 4);
+var answer2 = FindMessageBeginIndex(input, 14);
 
-for (var i = 4; i < input.Length; i++)
+Answer(1, answer1);
+Answer(2, answer2);
+
+static int FindMessageBeginIndex(string input, int uniqueLength)
 {
-    messageBeginEndIndex = i;
-    var set = new HashSet<char>(messageBeginBuffer);
-    if (set.Count == messageBeginBuffer.Count) break;
+    var messageBeginBuffer = new Queue<char>(input.Take(uniqueLength));
+    int messageBeginEndIndex = uniqueLength;
 
-    messageBeginBuffer.Dequeue();
-    messageBeginBuffer.Enqueue(input[messageBeginEndIndex]);
+    for (var i = uniqueLength; i < input.Length; i++)
+    {
+        messageBeginEndIndex = i;
+        var set = new HashSet<char>(messageBeginBuffer);
+        if (set.Count == messageBeginBuffer.Count) break;
+
+        messageBeginBuffer.Dequeue();
+        messageBeginBuffer.Enqueue(input[messageBeginEndIndex]);
+    }
+
+    return messageBeginEndIndex;
 }
-
-Answer(1, messageBeginEndIndex);
-

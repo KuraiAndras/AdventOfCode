@@ -13,7 +13,7 @@ foreach (var line in inputLines)
         {
             var targetSubDirectoryName = line.Replace("$ cd ", string.Empty);
 
-            if(targetSubDirectoryName != "..")
+            if (targetSubDirectoryName != "..")
             {
                 var targetSubDirectoryFullName = currentDirectory.FullPath + targetSubDirectoryName + "/";
 
@@ -54,8 +54,15 @@ foreach (var line in inputLines)
 }
 
 var answer1 = directories.Select(d => d.TotalSize()).Where(s => s <= 100000).Sum();
+var usedSpace = directories.Find(d => d.FullPath == "/")!.TotalSize();
+var freeSpace = 70000000 - usedSpace;
+var (_, answer2) = directories
+    .Select(d => (directory: d, size: d.TotalSize()))
+    .Where(d => freeSpace + d.size >= 30000000)
+    .MinBy(d => d.size);
 
 Answer(1, answer1);
+Answer(2, answer2);
 
 record DirectoryEntry(string Name, string FullPath)
 {

@@ -26,8 +26,4 @@ dotnet new console -o $ProjectFolder
 
 dotnet sln add $ProjectFolder
 
-Write-Host "Downloading input"
-
-$AuthCookie = Get-Content ".\cookie.txt"
-
-Invoke-WebRequest -Uri "https://adventofcode.com/${Year}/day/${Day}/input" -Headers @{"cookie" = "session=${AuthCookie}" } -OutFile $InputFile
+.\DownloadInput.ps1

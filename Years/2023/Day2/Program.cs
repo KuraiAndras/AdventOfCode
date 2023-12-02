@@ -11,7 +11,8 @@ var allColors = new Dictionary<string, int>
     { "blue", 14 },
 };
 
-var answer1Ids = new List<int>();
+var possibleGameIds = new List<int>();
+var powers = new List<int>();
 foreach (var line in lines)
 {
     var id = int.Parse(gameRegex.Match(line).Value.Replace("Game ", string.Empty).Replace(":", string.Empty));
@@ -30,11 +31,16 @@ foreach (var line in lines)
 
     if (IsPossibleDraw(game, allColors))
     {
-        answer1Ids.Add(game.Id);
+        possibleGameIds.Add(game.Id);
     }
+
+    var mins = draws.SelectMany(d => d).GroupBy(d => d.Color).Select(g => new Draw(g.Select(g => g.Count).Max(), g.Key)).ToArray();
+    var power = mins.Aggregate(1, (aggregate, d) => aggregate * d.Count);
+    powers.Add(power);
 }
 
-Answer(1, answer1Ids.Sum());
+Answer(1, possibleGameIds.Sum());
+Answer(2, powers.Sum());
 
 static bool IsPossibleDraw(Game game, Dictionary<string, int> maxColors) => game.Draws.SelectMany(d => d).All(d => maxColors[d.Color] >= d.Count);
 

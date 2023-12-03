@@ -8,7 +8,6 @@ param(
 $CurrentDirectory = Get-Location
 
 $ProjectFolder = "${CurrentDirectory}\Years\${Year}\Day${Day}"
-$InputFile = "${ProjectFolder}\Data1.txt"
 $ProjectFile = "${ProjectFolder}\Day${Day}.csproj"
 
 Write-Host("Creating project at path: ${ProjectFile}")
@@ -26,4 +25,4 @@ dotnet new console -o $ProjectFolder
 
 dotnet sln add $ProjectFolder
 
-.\DownloadInput.ps1
+.\DownloadInput.ps1 $Year $Day

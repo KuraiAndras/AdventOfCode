@@ -7,6 +7,7 @@ var notSymbol = new string("0123456789.");
 var allNumbers = new string("0123456789");
 var partNumbers = new List<int>();
 var visitedNodes = new HashSet<(int i, int j)>();
+var gearRatios = new List<int>();
 
 for (var i = 0; i < inputMap.Length; i++)
 {
@@ -16,10 +17,12 @@ for (var i = 0; i < inputMap.Length; i++)
         var currentChar = currentLine[j];
         if (notSymbol.Contains(currentChar)) continue;
         VisitNeighbours(i, j, inputMap);
+        GetGears(i, j, inputMap);
     }
 }
 
 Answer(1, partNumbers.Sum());
+Answer(2, gearRatios.Sum());
 
 void VisitNeighbours(int i, int j, string[] inputMap)
 {
@@ -37,7 +40,7 @@ void VisitNeighbours(int i, int j, string[] inputMap)
 
             if (!allNumbers.Contains(currentChar)) continue;
 
-            var (number, currentVisitedNodes)= GetNumber(currentI, currentJ, inputMap);
+            var (number, currentVisitedNodes) = GetNumber(currentI, currentJ, inputMap);
 
             partNumbers.Add(number);
             foreach (var c in currentVisitedNodes)
@@ -45,6 +48,42 @@ void VisitNeighbours(int i, int j, string[] inputMap)
                 visitedNodes.Add(c);
             }
         }
+    }
+}
+
+void GetGears(int i, int j, string[] inputMap)
+{
+    var centerChar = inputMap[i][j];
+    var isGear = centerChar == '*';
+
+    var currentGearRatios = new HashSet<int>();
+
+    for (var x = -1; x <= 1; x++)
+    {
+        var currentI = i + x;
+
+        for (var y = -1; y <= 1; y++)
+        {
+            var currentJ = j + y;
+
+            if (currentI < 0 || currentJ < 0 || currentI > maxI || currentJ > maxJ) continue;
+
+            var currentChar = inputMap[currentI][currentJ];
+
+            if (!allNumbers.Contains(currentChar)) continue;
+
+            var (number, _) = GetNumber(currentI, currentJ, inputMap);
+
+            if (isGear)
+            {
+                currentGearRatios.Add(number);
+            }
+        }
+    }
+
+    if (currentGearRatios.Count == 2)
+    {
+        gearRatios.Add(currentGearRatios.ElementAt(0) * currentGearRatios.ElementAt(1));
     }
 }
 
